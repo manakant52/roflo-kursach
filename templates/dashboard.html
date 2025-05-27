@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="Company Logo">
+            </div>
+            <div class="user-info">
+                <span>Добро пожаловать! #{{ session.user_id }}</span>
+                <a href="/logout" class="btn logout">Logout</a>
+            </div>
+        </div>
+
+        <div class="content">
+            <h2>{% if session.is_admin %}System Administration{% else %}Your Profile{% endif %}</h2>
+            
+            <div class="data-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Password</th>
+                            {% if session.is_admin %}<th>Is Admin</th>{% endif %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>{{ user[0] }}</td>
+                            <td>{{ user[1] }}</td>
+                            <td>{{ user[2] }}</td>
+                            {% if session.is_admin %}<td>{{ "Yes" if user[3] else "No" }}</td>{% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% if session.is_admin %}
+            <div class="admin-notice">
+                <h3>Admin Privileges:</h3>
+                <ul>
+                    <li>Full system access</li>
+                    <li>View all user accounts</li>
+                    <li>System configuration</li>
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
